@@ -29,33 +29,24 @@ function onSubmit(event) {
 
   // Отримуємо значення з поля введення та перетворюємо його число
 
-  const delay = parseInt(delayEl.value);
+  const delayValue = parseInt(delayEl.value);
   // Отримуємо обраний стан з радіокнопок
   const state = stateEl.value;
 
+  console.log(state);
+
   // Створюємо новий проміс
   const promise = new Promise((resolve, reject) => {
-    if (state === 'fulfilled') {
-      setTimeout(() => {
-        resolve(delay);
-      }, delay);
-    } else if (state === 'rejected') {
-      setTimeout(() => {
-        reject(delay);
-      }, delay);
-    }
+    // Встановлюємо таймер
+    setTimeout(() => {
+      //перевіряємо стан обраної кнопки
+      if (state === 'fulfilled') {
+        resolve(delayValue);
+      } else if (state === 'rejected') {
+        reject(delayValue);
+      }
+    }, delayValue);
   });
-
-  // Встановлюємо таймер
-  //     setTimeout(() => {
-  //       //перевіряємо стан обраної кнопки
-  //       if (state === 'fulfilled') {
-  //         resolve(delay);
-  //       } else if (state === 'rejected') {
-  //         reject(delay);
-  //       }
-  //     }, delay);
-  //   });
 
   //обробляємо проміс
   promise
