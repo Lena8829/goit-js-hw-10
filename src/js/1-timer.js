@@ -5,10 +5,10 @@
 //* Якщо користувач вибрав валідну дату (в майбутньому), кнопка «Start» стає активною.
 
 //* Кнопка «Start» повинна бути неактивною доти, доки користувач не вибрав дату в майбутньому. Зверни увагу, що при обранні валідної дати, не запуску таймера і обранні потім невалідної дати, кнопка після розблокування має знову стати неактивною.
-// Натисканням на кнопку «Start» починається зворотний відлік часу до обраної дати з моменту натискання.
+// *Натисканням на кнопку «Start» починається зворотний відлік часу до обраної дати з моменту натискання.
 
-// Відлік часу:
-// Натисканням на кнопку «Start» скрипт повинен обчислювати раз на секунду, скільки часу залишилось до вказаної дати, і оновлювати інтерфейс таймера, показуючи чотири цифри: дні, години, хвилини і секунди у форматі xx:xx:xx:xx.
+// *Відлік часу:
+//* Натисканням на кнопку «Start» скрипт повинен обчислювати раз на секунду, скільки часу залишилось до вказаної дати, і оновлювати інтерфейс таймера, показуючи чотири цифри: дні, години, хвилини і секунди у форматі xx:xx:xx:xx.
 
 // Кількість днів може складатися з більше, ніж двох цифр.
 //* Таймер повинен зупинятися, коли дійшов до кінцевої дати, тобто залишок часу дорівнює нулю 00:00:00:00.
@@ -26,10 +26,10 @@ import 'izitoast/dist/css/iziToast.min.css';
 //----------------------------------------------------------------------------------
 const datetimePicker = document.querySelector('#datetime-picker');
 const startButton = document.querySelector('[data-start]');
-const timerDay = document.querySelector(['data-days']);
-const timerHour = document.querySelector(['data-hours']);
-const timerMinute = document.querySelector(['data-minutes']);
-const timerSecond = document.querySelector(['data-seconds']);
+const timerDay = document.querySelector('[data-days]');
+const timerHour = document.querySelector('[data-hours]');
+const timerMinute = document.querySelector('[data-minutes]');
+const timerSecond = document.querySelector('[data-seconds]');
 
 startButton.addEventListener('click', startTimer);
 
@@ -62,44 +62,6 @@ const options = {
 
 flatpickr('#datetime-picker', options);
 //------------------------------------------------------------------------------------
-
-//конвертація мілісекунд--------------------------------------------------------------
-function convertMs(ms) {
-  // Number of milliseconds per unit of time
-  const second = 1000;
-  const minute = second * 60;
-  const hour = minute * 60;
-  const day = hour * 24;
-
-  const days = Math.floor(ms / day);
-  const hours = Math.floor((ms % day) / hour);
-  const minutes = Math.floor(((ms % day) % hour) / minute);
-  const seconds = Math.floor((((ms % day) % hour) % minute) / second);
-  return { days, hours, minutes, seconds };
-}
-
-console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
-console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
-console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
-//----------------------------------------------------------------------------------
-
-function addLeadingZero(value) {
-  return String(value).padStart(2, '0'); //додаєм "0" вперед одинарної цифри
-
-  // return value < 10 ? `0${value}` : value;
-}
-//-----------------------------------------------------------------------------------
-
-//відображення таймера(скільки лишилось часу)---------------------------------
-function timerUpdate(ms) {
-  const { days, hours, minutes, seconds } = convertMs(ms);
-
-  timerDay.textContent = addLeadingZero(days);
-  timerHour.textContent = addLeadingZero(hours);
-  timerMinute.textContent = addLeadingZero(minutes);
-  timerSecond.textContent = addLeadingZero(seconds);
-}
-//-------------------------------------------------------------------------------------
 
 function startTimer() {
   // Робимо кнопку "Start" та поле вибору дати неактивними
@@ -137,3 +99,41 @@ function startTimer() {
 
   timerUpdate(timeDiff);
 }
+
+//конвертація мілісекунд--------------------------------------------------------------
+function convertMs(ms) {
+  // Number of milliseconds per unit of time
+  const second = 1000;
+  const minute = second * 60;
+  const hour = minute * 60;
+  const day = hour * 24;
+
+  const days = Math.floor(ms / day);
+  const hours = Math.floor((ms % day) / hour);
+  const minutes = Math.floor(((ms % day) % hour) / minute);
+  const seconds = Math.floor((((ms % day) % hour) % minute) / second);
+  return { days, hours, minutes, seconds };
+}
+
+// console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
+// console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
+// console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
+//----------------------------------------------------------------------------------
+
+function addLeadingZero(value) {
+  return String(value).padStart(2, '0'); //додаєм "0" вперед одинарної цифри
+
+  // return value < 10 ? `0${value}` : value;
+}
+//-----------------------------------------------------------------------------------
+
+//відображення таймера(скільки лишилось часу)---------------------------------
+function timerUpdate(ms) {
+  const { days, hours, minutes, seconds } = convertMs(ms);
+
+  timerDay.textContent = addLeadingZero(days);
+  timerHour.textContent = addLeadingZero(hours);
+  timerMinute.textContent = addLeadingZero(minutes);
+  timerSecond.textContent = addLeadingZero(seconds);
+}
+//-------------------------------------------------------------------------------------
