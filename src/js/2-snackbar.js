@@ -20,7 +20,7 @@ import 'izitoast/dist/css/iziToast.min.css';
 
 const form = document.querySelector('.form');
 const delayEl = form.querySelector("input[name='delay']"); //введене значення затримки
-const stateEl = form.querySelector("input[name='state']");
+// const stateEl = form.querySelector("input[name='state']");
 
 form.addEventListener('submit', onSubmit);
 
@@ -31,7 +31,7 @@ function onSubmit(event) {
 
   const delayValue = parseInt(delayEl.value);
   // Отримуємо обраний стан з радіокнопок
-  const state = stateEl.value;
+  const state = event.currentTarget.elements.state.value;
 
   console.log(state);
 

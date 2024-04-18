@@ -23,3 +23,44 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
+
+.flatpickr-calendar {
+  border-radius: 8px;
+  padding: 16px;
+  width: 280px;
+  height: 352px;
+
+  background: #f5f5f5;
+}
+
+.timer {
+  width: 346px;
+  height: 72px;
+
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.field {
+  width: 55px;
+  height: 72px;
+
+  text-align: center;
+}
+
+.value {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 1.2;
+  letter-spacing: 0.04em;
+  color: #2e2f42;
+}
+.label {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #2e2f42;
+  text-transform: uppercase;
+}
