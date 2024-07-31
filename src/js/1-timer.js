@@ -10,7 +10,7 @@
 // *Відлік часу:
 //* Натисканням на кнопку «Start» скрипт повинен обчислювати раз на секунду, скільки часу залишилось до вказаної дати, і оновлювати інтерфейс таймера, показуючи чотири цифри: дні, години, хвилини і секунди у форматі xx:xx:xx:xx.
 
-// Кількість днів може складатися з більше, ніж двох цифр.
+//* Кількість днів може складатися з більше, ніж двох цифр.
 //* Таймер повинен зупинятися, коли дійшов до кінцевої дати, тобто залишок часу дорівнює нулю 00:00:00:00.
 
 // *Після запуску таймера натисканням кнопки Старт кнопка Старт і інпут стають неактивним, щоб користувач не міг обрати нову дату, поки йде відлік часу. Якщо таймер запущений, для того щоб вибрати нову дату і перезапустити його — необхідно перезавантажити сторінку.
@@ -24,12 +24,23 @@ import 'flatpickr/dist/flatpickr.min.css';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 //----------------------------------------------------------------------------------
+import {
+  addLeadingZero,
+  convertMs,
+  timerDay,
+  timerHour,
+  timerMinute,
+  timerSecond,
+} from './helpers/timer-functions.js';
+
+//----------------------------------------------------------------------------------
+
 const datetimePicker = document.querySelector('#datetime-picker');
-const startButton = document.querySelector('[data-start]');
-const timerDay = document.querySelector('[data-days]');
-const timerHour = document.querySelector('[data-hours]');
-const timerMinute = document.querySelector('[data-minutes]');
-const timerSecond = document.querySelector('[data-seconds]');
+const startButton = document.querySelector('.start-btn');
+// const timerDay = document.querySelector('[data-days]');
+// const timerHour = document.querySelector('[data-hours]');
+// const timerMinute = document.querySelector('[data-minutes]');
+// const timerSecond = document.querySelector('[data-seconds]');
 
 startButton.addEventListener('click', startTimer);
 
@@ -50,82 +61,30 @@ const options = {
       iziToast.error({
         title: 'Error',
         message: 'Please choose a date in the future',
+
+        messageColor: '#FFF',
+        titleColor: '#FFF',
+
+        backgroundColor: '#ef4040',
+        borderBottom: '2px solid #ffbebe',
+        borderRadius: '4px',
+        padding: '20px',
+        width: '302px',
+        height: '64px',
+        timeout: 5000, // Время отображения
       });
+
+      // window.alert('Please choose a date in the future');
 
       startButton.disabled = true; // Вимикаємо кнопку
     } else {
       startButton.disabled = false; // Активуємо
     }
-    console.log(selectedDates[0]);
+    // console.log(selectedDates[0]);
   },
 };
 
 flatpickr('#datetime-picker', options);
-//------------------------------------------------------------------------------------
-
-function startTimer() {
-  // Робимо кнопку "Start" та поле вибору дати неактивними
-  startButton.disabled = true;
-  datetimePicker.disabled = true;
-
-  const currentDate = new Date();
-  const timeDiff = userSelectedDate - currentDate; // Визначаємо різницю у часі
-
-  //зупиняємо таймер, коли вже 0
-  if (timeDiff <= 0) {
-    clearInterval(timerInterval);
-
-    timerUpdate(0); // Відображаємо 00:00:00:00
-    startButton.disabled = false; // знову активно
-    datetimePicker.disabled = false;
-    return;
-  }
-
-  // Оновлюємо таймер кожну секунду
-  timerInterval = setInterval(() => {
-    const currentDate = new Date();
-    const timeDiff = userSelectedDate - currentDate;
-
-    if (timeDiff <= 0) {
-      clearInterval(timerInterval);
-      timerUpdate(0); // Відображаємо 00:00:00:00
-      startButton.disabled = false; // знову активно
-      datetimePicker.disabled = false;
-      return;
-    }
-
-    timerUpdate(timeDiff);
-  }, 1000);
-
-  timerUpdate(timeDiff);
-}
-
-//конвертація мілісекунд--------------------------------------------------------------
-function convertMs(ms) {
-  // Number of milliseconds per unit of time
-  const second = 1000;
-  const minute = second * 60;
-  const hour = minute * 60;
-  const day = hour * 24;
-
-  const days = Math.floor(ms / day);
-  const hours = Math.floor((ms % day) / hour);
-  const minutes = Math.floor(((ms % day) % hour) / minute);
-  const seconds = Math.floor((((ms % day) % hour) % minute) / second);
-  return { days, hours, minutes, seconds };
-}
-
-// console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
-// console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
-// console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
-//----------------------------------------------------------------------------------
-
-function addLeadingZero(value) {
-  return String(value).padStart(2, '0'); //додаєм "0" вперед одинарної цифри
-
-  // return value < 10 ? `0${value}` : value;
-}
-//-----------------------------------------------------------------------------------
 
 //відображення таймера(скільки лишилось часу)---------------------------------
 function timerUpdate(ms) {
@@ -137,3 +96,47 @@ function timerUpdate(ms) {
   timerSecond.textContent = addLeadingZero(seconds);
 }
 //-------------------------------------------------------------------------------------
+
+startButton.disabled = true; // робимо кнопку на початку неактивною
+
+function startTimer() {
+  // Робимо кнопку та поле вибору дати неактивними після кліку
+  startButton.disabled = true;
+  datetimePicker.disabled = true;
+
+  // Визначаємо різницю у часі
+  const currentDate = new Date();
+  const timeDiff = userSelectedDate - currentDate;
+
+  // Оновлюємо таймер кожну секунду
+  timerInterval = setInterval(() => {
+    // Визначаємо різницю у часі
+    const currentDate = new Date();
+    const timeDiff = userSelectedDate - currentDate;
+
+    if (timeDiff <= 0) {
+      clearInterval(timerInterval);
+      timerUpdate(0); // Відображаємо 00:00:00:00
+
+      startButton.disabled = false; // знову активно
+      datetimePicker.disabled = false; // знову активно
+    }
+
+    timerUpdate(timeDiff);
+
+    // console.log(timeDiff);
+  }, 1000);
+
+  timerUpdate(timeDiff);
+
+  //зупиняємо таймер, коли вже 0
+  if (timeDiff <= 0) {
+    clearInterval(timerInterval);
+
+    timerUpdate(0); // Відображаємо 00:00:00:00
+    startButton.disabled = false; // знову активно
+    datetimePicker.disabled = false;
+  }
+}
+
+//----------------------------------------------------------------------------------

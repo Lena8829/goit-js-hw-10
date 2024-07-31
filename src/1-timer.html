@@ -11,36 +11,50 @@
 </head>
 
 <body>
+
   <section>
     <a href="./index.html">Go to home</a>
-    <h1>Welcome to page 2</h1>
+    <h1>Countdown timer</h1>
   </section>
 
-  <!-- Кнопка Start -->
-  <input type="text" id="datetime-picker" />
-  <button type="button" data-start>Start</button>
+
+
+  <div class="timer-form">
+    <!-- Кнопка Start -->
+    <input type="text" id="datetime-picker" />
+    <button class="start-btn" type="button" data-start>Start</button>
+  </div>
+
+
 
   <!-- відображення таймера -->
   <div class="timer">
+
     <div class="field">
       <span class="value" data-days>00</span>
       <span class="label">Days</span>
     </div>
+
     <div class="field">
       <span class="value" data-hours>00</span>
       <span class="label">Hours</span>
     </div>
+
     <div class="field">
       <span class="value" data-minutes>00</span>
       <span class="label">Minutes</span>
     </div>
+
     <div class="field">
       <span class="value" data-seconds>00</span>
       <span class="label">Seconds</span>
     </div>
+
   </div>
 
   <script type="module" src="./js/1-timer.js"></script>
+
+
 </body>
 
 </html>
